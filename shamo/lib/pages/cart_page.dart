@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/pages/cart_card.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/widgets/cart_card.dart';
+import 'package:shamo/provider/cart_provider.dart';
 import 'package:shamo/theme.dart';
 
 class CartPage extends StatelessWidget {
@@ -7,6 +9,8 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
     PreferredSizeWidget header() {
       return PreferredSize(
         preferredSize: const Size.fromHeight(70),
@@ -74,7 +78,11 @@ class CartPage extends StatelessWidget {
     Widget content() {
       return ListView(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-        children: [CartCard()],
+        children: cartProvider.cart
+        .map(
+          (cart) =>  CartCard(product),
+        )
+        .toList()
       );
     }
 

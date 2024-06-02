@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/models/user_model.dart';
+import 'package:shamo/provider/auth_providers.dart';
+import 'package:shamo/provider/product_providers.dart';
 import 'package:shamo/theme.dart';
 import 'package:shamo/widgets/product_Tile.dart';
 import 'package:shamo/widgets/product_card.dart';
@@ -7,6 +11,10 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
+    AuthProviders authProvider = Provider.of<AuthProviders>(context);
+    UserModel user = authProvider.user;
+    ProductProviders productProviders = Provider.of<ProductProviders>(context);
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -18,12 +26,12 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hallo Murphy',
+                    'Hallo ${user.name}',
                     style: primaryTextStyle.copyWith(
                         fontSize: 24, fontWeight: semiBold),
                   ),
                   Text(
-                    '@AlexinSancs',
+                    '@${user.email}',
                     style: subtitleTextStyle.copyWith(fontSize: 16),
                   )
                 ],
@@ -33,9 +41,12 @@ class HomePage extends StatelessWidget {
               width: 54,
               height: 54,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('assets/user_profile.png'))),
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(
+                  "${user.profilePhotoUrl}",
+                )),
+              ),
             )
           ],
         ),
@@ -143,18 +154,20 @@ class HomePage extends StatelessWidget {
               SizedBox(
                 width: defaultMargin,
               ),
-              Row(children: [
-                ProductCard(),
-                ProductCard(),
-                ProductCard()
-              ],)
+              Row(
+                children: productProviders.products
+                .map(
+                  (product) => ProductCard(product),
+                )
+                .toList(),
+              )
             ],
           ),
         ),
       );
     }
-    
-    Widget newArivalsTitle() {    
+
+    Widget newArivalsTitle() {
       return Container(
         margin: EdgeInsets.only(
             top: defaultMargin, left: defaultMargin, right: defaultMargin),
@@ -169,25 +182,24 @@ class HomePage extends StatelessWidget {
       return Container(
         margin: EdgeInsets.only(top: 14),
         child: Column(
-          children: [
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile()
-          ],
+          children: productProviders.products
+          .map(
+            (product) => ProductTile(product),
+            )
+            .toList()
         ),
       );
     }
 
-
     return ListView(
       children: [
-        header(), 
-        category(), 
+        header(),
+        category(),
         popuralProductTitle(),
         popuralProduct(),
         newArivalsTitle(),
-        newArivals()],
+        newArivals()
+      ],
     );
   }
 }

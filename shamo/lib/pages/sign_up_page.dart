@@ -1,21 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/provider/auth_providers.dart';
 import 'package:shamo/theme.dart';
+import 'package:shamo/widgets/loading_button.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignUpPage extends StatefulWidget {
+  // Add Contrller every input
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController nameController = TextEditingController(text: '');
+
+  TextEditingController usernameController = TextEditingController(text: '');
+
+  TextEditingController emailController = TextEditingController(text: '');
+
+  TextEditingController passwordController = TextEditingController(text: '');
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    AuthProviders authProvider = Provider.of<AuthProviders>(context);
+
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      if (await authProvider.register(
+          name: nameController.text,
+          username: usernameController.text,
+          email: emailController.text,
+          password: passwordController.text)) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              'Gagal Register!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     Widget header() {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(
+          top: 30,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Sign Up',
-              style:
-                  primaryTextStyle.copyWith(fontSize: 24, fontWeight: semiBold),
+              style: primaryTextStyle.copyWith(
+                fontWeight: semiBold,
+                fontSize: 24,
+              ),
             ),
             SizedBox(
               height: 2,
@@ -23,7 +74,7 @@ class SignUpPage extends StatelessWidget {
             Text(
               'Register and Happy Shoping',
               style: subtitleTextStyle,
-            )
+            ),
           ],
         ),
       );
@@ -31,52 +82,66 @@ class SignUpPage extends StatelessWidget {
 
     Widget nameInput() {
       return Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: EdgeInsets.only(
+          top: 50,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Full Name',
-              style:
-                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+              'Full name',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
             ),
             SizedBox(
               height: 12,
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
               decoration: BoxDecoration(
-                  color: backgroundColor2,
-                  borderRadius: BorderRadius.circular(12)),
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Center(
-                  child: Row(
-                children: [
-                  Image.asset(
-                    'assets/icon_name.png',
-                    width: 17,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon_name.png',
+                      width: 17,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
                       child: TextFormField(
-                    style: primaryTextStyle,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Your Full Name',
-                        hintStyle: subtitleTextStyle),
-                  ))
-                ],
-              )),
+                        style: primaryTextStyle,
+                        // Place controller at here
+                        controller: nameController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Your Full name',
+                          hintStyle: subtitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
       );
     }
 
-    Widget usernameInput() {
+    Widget usernamelInput() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(
+          top: 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -92,29 +157,38 @@ class SignUpPage extends StatelessWidget {
             ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                  color: backgroundColor2,
-                  borderRadius: BorderRadius.circular(12)),
-              child: Center(
-                child: Row(children: [
-                  Image.asset(
-                    'assets/icon_username.png',
-                    width: 17,
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                      child: TextFormField(
-                    style: primaryTextStyle,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Your Username',
-                        hintStyle: subtitleTextStyle),
-                  ))
-                ]),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
               ),
-            )
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon_username.png',
+                      width: 17,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        style: primaryTextStyle,
+                        // Place controller at here
+                        controller: usernameController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Your Username',
+                          hintStyle: subtitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       );
@@ -122,82 +196,113 @@ class SignUpPage extends StatelessWidget {
 
     Widget emailInput() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Email Address',
-            style: primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-                color: backgroundColor2,
-                borderRadius: BorderRadius.circular(12)),
-            child: Center(
-              child: Row(children: [
-                Image.asset(
-                  'assets/icon_email.png',
-                  width: 17,
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                    child: TextFormField(
-                  style: primaryTextStyle,
-                  decoration: InputDecoration.collapsed(
-                      hintText: 'Your Email Address',
-                      hintStyle: subtitleTextStyle),
-                ))
-              ]),
+        margin: EdgeInsets.only(
+          top: 20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Email Address',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
             ),
-          )
-        ]),
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon_email.png',
+                      width: 17,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        style: primaryTextStyle,
+                        // Place controller at here
+                        controller: emailController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Your Email Address',
+                          hintStyle: subtitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
 
     Widget passwordInput() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(
+          top: 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Password',
-              style:
-                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
             ),
-            SizedBox(height: 12),
+            SizedBox(
+              height: 12,
+            ),
             Container(
               height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
               decoration: BoxDecoration(
-                  color: backgroundColor2,
-                  borderRadius: BorderRadius.circular(12)),
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Center(
-                  child: Row(
-                children: [
-                  Image.asset(
-                    'assets/icon_password.png',
-                    width: 17,
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/icon_password.png',
+                      width: 17,
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
                       child: TextFormField(
-                    style: primaryTextStyle,
-                    obscureText: true,
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Your Password',
-                        hintStyle: subtitleTextStyle),
-                  ))
-                ],
-              )),
+                        style: primaryTextStyle,
+                        obscureText: true,
+                        // Place controller at here
+                        controller: passwordController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Your Password',
+                          hintStyle: subtitleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -210,16 +315,19 @@ class SignUpPage extends StatelessWidget {
         width: double.infinity,
         margin: EdgeInsets.only(top: 30),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleSignUp,
           style: TextButton.styleFrom(
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12))),
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
           child: Text(
             'Sign Up',
-            style: primaryTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+            style: primaryTextStyle.copyWith(
+              fontSize: 16,
+              fontWeight: medium,
+            ),
           ),
         ),
       );
@@ -233,20 +341,22 @@ class SignUpPage extends StatelessWidget {
           children: [
             Text(
               'Already have an account? ',
-              style: subtitleTextStyle.copyWith(fontSize: 12),
+              style: subtitleTextStyle.copyWith(
+                fontSize: 12,
+              ),
             ),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
-              }, 
+              },
               child: Text(
                 'Sign In',
                 style: purperTextStyle.copyWith(
                   fontSize: 12,
-                  fontWeight: medium
+                  fontWeight: medium,
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -257,18 +367,20 @@ class SignUpPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+          margin: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               header(),
               nameInput(),
-              usernameInput(),
+              usernamelInput(),
               emailInput(),
               passwordInput(),
-              signUpButton(),
+              isLoading ? LoadingButton() : signUpButton(),
               Spacer(),
-              footer()
+              footer(),
             ],
           ),
         ),

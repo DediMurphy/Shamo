@@ -1,6 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo/provider/product_providers.dart';
 import 'package:shamo/theme.dart';
 
 class SplashPage extends StatefulWidget {
@@ -13,12 +13,16 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
+
+    getInit();
     // TODO: implement initState
-    Timer(
-      Duration(seconds: 3), 
-      () => Navigator.pushNamed(context, '/sign-in')
-      );
+   
     super.initState();
+  }
+
+  getInit()async {
+    await Provider.of<ProductProviders>(context, listen: false).getProducts();
+    Navigator.pushNamed(context, '/sign-in');
   }
 
   @override
