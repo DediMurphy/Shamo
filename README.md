@@ -7,8 +7,9 @@ APIs created using the Laravel framework will facilitate users' shopping experie
 
 ## Peek Peek
 ![shamo](https://github.com/DediMurphy/Shamo/assets/99854509/77792e6f-bea9-4504-a18e-c0a36d1aab29){: width="700"}
+<img src="https://github.com/DediMurphy/Shamo/assets/99854509/77792e6f-bea9-4504-a18e-c0a36d1aab29" alt="shamo App" width="700" />
 
-## Important point
+## Point
 - Building API with Laravel 8 and Postman
 - Create an Admin Panel with Laravel Jetstream
 - Slicing UI from Figma to Flutter
