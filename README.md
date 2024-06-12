@@ -6,7 +6,6 @@ In this course, I build an e-commerce application using the PHP Laravel framewor
 APIs created using the Laravel framework will facilitate users' shopping experience on e-commerce platforms. Through a case study of the Online Shoe Store application, exploring important features such as application settings, user feedback, and transactions.
 
 ## Peek Peek
-![shamo](https://github.com/DediMurphy/Shamo/assets/99854509/77792e6f-bea9-4504-a18e-c0a36d1aab29){: width="700"}
 <img src="https://github.com/DediMurphy/Shamo/assets/99854509/77792e6f-bea9-4504-a18e-c0a36d1aab29" alt="shamo App" width="700" />
 
 ## Point
